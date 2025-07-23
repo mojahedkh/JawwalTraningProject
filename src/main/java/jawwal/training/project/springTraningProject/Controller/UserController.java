@@ -12,7 +12,7 @@ import java.util.Map;
 @RequestMapping("User")
 public class UserController {
 
-    private List<String> allCourses = List.of("Medicine", "calculas -1- ", "calculas -2-", "Mathmatics", "Phyics", "Software Enginnering");
+    private List<String> allCourses =  List.of("Medicine", "calculas -1- ", "calculas -2-", "Mathmatics", "Phyics", "Software Enginnering");
 
 
     @GetMapping("/getUser")
