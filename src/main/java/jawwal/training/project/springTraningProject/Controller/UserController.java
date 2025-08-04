@@ -1,44 +1,72 @@
 package jawwal.training.project.springTraningProject.Controller;
 
-import jawwal.training.project.springTraningProject.Model.Course;
-import jawwal.training.project.springTraningProject.Model.StringProcessTest;
+import jakarta.validation.Valid;
+import jawwal.training.project.springTraningProject.DTO.UserDTO;
+import jawwal.training.project.springTraningProject.Model.Response;
+import jawwal.training.project.springTraningProject.Service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
-@RequestMapping("User")
+@RequestMapping("user")
 public class UserController {
+    private static List<String> names = new ArrayList<>(List.of("Ahmad", "Mohammad", "Lama", "Manar"));
 
-    private List<String> allCourses =  List.of("Medicine", "calculas -1- ", "calculas -2-", "Mathmatics", "Phyics", "Software Enginnering");
+    @Autowired
+    public UserService userService;
 
 
     @GetMapping("/getUser")
-    public String getUser() {
-        return "Mujahed";
+    public List<String> getName() {
+        return names;
+    }
+    @GetMapping("/getSpecificName")
+    public ResponseEntity<String> getsSpecificName(){
+        return ResponseEntity.ok(userService.getName());
     }
 
 
-    @PostMapping("/getSpecificCourse")
-    public ResponseEntity<?> getSpecificCourse(@RequestBody Course courseRequest) {
-        try {
-            String Course = allCourses
-                    .stream()
-                    .filter(course -> course.contains(courseRequest.getCourseName()))
-                    .findFirst().orElseThrow(() ->
-                            new RuntimeException("There is no Course name "));
-        } catch (Exception ex) {
-            System.out.println("Exception type is : " + ex.getClass());
-            return ResponseEntity.ok(Map.of("ResponseCode", "-1", "ResponseMessege", "Failed"));
-        }
-        return ResponseEntity.ok(Map.of("ResponseCode", "0", "ResponseMessege", "Success"));
+    @GetMapping("/getUserByUserName/{userName}")
+    public Optional<String> getUserByUserName(@PathVariable String userName) {
+
+        return names.stream()
+                .filter(user -> user.equals(userName))
+                .findFirst();
     }
 
     @PostMapping("/addNewUser")
-    public ResponseEntity<String> addNewUser(String user) {
-        allCourses.add(user);
-        return ResponseEntity.ok("Success");
+    public ResponseEntity<?> addNewUser(@Valid @RequestBody UserDTO user , BindingResult result) {
+
+        if(!result.hasErrors()){
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new  Response("0" , "Success" , null));
+        }
+        else{
+            Map<String,Object> resultSet = new HashMap<>();
+
+            result.getFieldErrors()
+                    .stream()
+                    .forEach( fileds ->
+                            resultSet.put(fileds.getField() , fileds.getDefaultMessage()));
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new Response("-1" , "Failed" ,resultSet ));
+
+        }
     }
+
+    @PostMapping("/validatePhoneName")
+    public UserDTO validateUser(@RequestBody UserDTO user) {
+        return user;
+    }
+    /* Please add Method Here --Task-- */
+
+
 }
