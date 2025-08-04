@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
 @Data
 @AllArgsConstructor
-public class Response {
+@NoArgsConstructor
+public class Response<T> {
     public String responseCode;
     public String responseMessage;
-    public Map<String , Object> responseStatus;
+    public T responseResult;
 }

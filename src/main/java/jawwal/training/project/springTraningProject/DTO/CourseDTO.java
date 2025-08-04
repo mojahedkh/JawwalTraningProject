@@ -1,5 +1,6 @@
 package jawwal.training.project.springTraningProject.DTO;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,13 +10,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseDTO {
+
+    @NotBlank(message = "course name is required ")
     public String CourseName;
+    @Size(min = 10, message = "Course Description must be at least 10 character")
     public String CourseDescription;
 
-    @Size(min = 2, max = 4, message = "Course hour must be between 2 and 4 hour")
     public Integer CourseHour;
 
-    public String CourseCategory;
-    public String CourseDepartment;
 
 }

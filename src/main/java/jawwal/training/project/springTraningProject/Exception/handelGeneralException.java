@@ -1,6 +1,7 @@
 package jawwal.training.project.springTraningProject.Exception;
 
 
+import jawwal.training.project.springTraningProject.Exception.CourseException.CourseNotValidException;
 import jawwal.training.project.springTraningProject.Model.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,13 @@ public class handelGeneralException {
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 new Response("-1" , "Failed" ,result ));
+    }
+
+    @ExceptionHandler({CourseNotValidException.class , Exception.class})
+    public ResponseEntity<Response> handleCourseNotValidException(CourseNotValidException ex){
+        Map<String,Object> result = new HashMap<>();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new Response("-1" , "Failed" ,ex.getMessage() ));
     }
 
 }

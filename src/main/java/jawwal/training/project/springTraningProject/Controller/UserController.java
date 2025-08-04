@@ -12,7 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-
+/* https/localhost:8080/user/getUser   */
 @RestController
 @RequestMapping("user")
 public class UserController {
