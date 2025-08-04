@@ -2,6 +2,7 @@ package jawwal.training.project.springTraningProject.Controller;
 
 import jakarta.validation.Valid;
 import jawwal.training.project.springTraningProject.DTO.UserDTO;
+import jawwal.training.project.springTraningProject.Exception.UserException.UserNameNotFoundException;
 import jawwal.training.project.springTraningProject.Model.Response;
 import jawwal.training.project.springTraningProject.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +16,22 @@ import java.util.*;
 @RestController
 @RequestMapping("user")
 public class UserController {
-    private static List<String> names = new ArrayList<>(List.of("Ahmad", "Mohammad", "Lama", "Manar"));
+    private static List<String> names =
+            new ArrayList<>(List.of("Ahmad", "Mohammad", "Lama", "Manar"));
 
     @Autowired
     public UserService userService;
-
 
     @GetMapping("/getUser")
     public List<String> getName() {
         return names;
     }
-    @GetMapping("/getSpecificName")
-    public ResponseEntity<String> getsSpecificName(){
-        return ResponseEntity.ok(userService.getName());
+    @GetMapping("/getSpecificName/{userName}")
+    public ResponseEntity<String> getsSpecificName(String userName){
+        String name = userService.getName(userName).
+                orElseThrow(()-> new UserNameNotFoundException("UserNameNot found"));
+
+        return ResponseEntity.ok(name);
     }
 
 
